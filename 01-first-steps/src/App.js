@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import MyComponent from './MyComponent';
+import MySecondComponent from './MySecondComponent';
 
 /**
  *  Un componente es una parte de la aplicacion.
@@ -26,7 +27,11 @@ function App() {
         </p>
 
         {/* Comentarios dentro del JSX */}
-        <MyComponent/>
+        <div>
+          <MySecondComponent />
+          <hr />
+          <MyComponent/>
+        </div>
 
       </header>
     </div>

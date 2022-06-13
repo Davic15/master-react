@@ -6,8 +6,8 @@ const MyComponent = () => {
     //return hacer el render el html/js
     //tres formas the contener varias etiquetas, fragments, divs o un fragment vacio.
     // <div></div> <></> <Fragment></Fragment>
-    const nombre = "David";
-    const web = "davic15.github.io"
+    //const nombre = "David";
+    //const web = "davic15.github.io"
     // mostrar datos de variables {variable}
     let usuario = {
         nombre: "David",
@@ -18,7 +18,6 @@ const MyComponent = () => {
     console.log(usuario);
     return (
         <div>
-            <hr/>
             <h2>Componente creado</h2>
             <h3>Datos del usuario:</h3>
             <ul>
@@ -37,5 +36,3 @@ const MyComponent = () => {
 }
 
 export default MyComponent;
-
-//export

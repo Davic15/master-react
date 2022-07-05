@@ -2,6 +2,8 @@ import logo from './logo.svg';
 import './App.css';
 import MyComponent from './MyComponent';
 import MySecondComponent from './MySecondComponent';
+import { MyThirdComponent } from './MyThirdComponent';
+import { MyFourthComponentEvent } from './MyFourthComponentEvent';
 
 /**
  *  Un componente es una parte de la aplicacion.
@@ -18,6 +20,15 @@ import MySecondComponent from './MySecondComponent';
 
 
 function App() {
+
+  const ficha_medica = {
+    altura: '175cm',
+    grupo: "A+",
+    estado: "Bueno",
+    alergias: "Ninguna"
+  }
+  //const numero = 123456;
+
   return (
     <div className="App">
       <header className="App-header">
@@ -28,6 +39,14 @@ function App() {
 
         {/* Comentarios dentro del JSX */}
         <div>
+          <hr />
+          <MyFourthComponentEvent />
+          <hr />
+          <MyThirdComponent 
+            nombre="David" 
+            apellido="Macias"
+            ficha={ficha_medica}
+          />
           <MySecondComponent />
           <hr />
           <MyComponent/>

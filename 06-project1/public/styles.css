@@ -216,3 +216,7 @@ input[type="buttom"] {
         width: 80%;
     }
 }
+
+.not-found{
+    color: #9b0202;
+}

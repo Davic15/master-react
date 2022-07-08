@@ -38,12 +38,12 @@ function App() {
       {/* Main Content */}
       <section className="content">
         {/* Movie list goes here */}
-        <List listState={listState} setListState={setListState}  />
+        <List listState={listState} setListState={setListState} />
       </section>
 
       {/* Aside section */}
       <aside className="aside">
-        <Search />
+        <Search listState={listState} setListState={setListState} />
         <Create setListState={setListState}/>
       </aside>
 

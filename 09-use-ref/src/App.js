@@ -1,7 +1,11 @@
+import { Example } from "./Components/Example";
+import { Foms } from "./Components/Foms";
+
 function App() {
   return (
     <div className="App">
-      <h1>Hi</h1>
+      <Example />
+      <Foms />
     </div>
   );
 }

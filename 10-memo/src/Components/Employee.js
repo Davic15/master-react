@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react'
 
-export const Employee = React.memo (({page}) => {
+export const Employee = React.memo (({page, displayMessage}) => {
 
     const [emp, setEmp] = useState([]);
 
     useEffect(() => {
         console.log("New render Employee");
     }, [emp])
-
-
-
 
     const getEmployee = async(p) => {
         const url = `https://reqres.in/api/users?page=${p}`;
@@ -21,8 +18,8 @@ export const Employee = React.memo (({page}) => {
 
     useEffect(() => {
         getEmployee(page);
+        displayMessage();
     }, [page])
-
 
     return (
         <div>

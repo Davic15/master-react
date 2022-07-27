@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Employee } from './Employee'
 
 export const Manager = () => {
@@ -14,6 +14,10 @@ export const Manager = () => {
         console.log('The component was rendered.')
     }, [name, page])
 
+    const displayMessage = useCallback(() => {
+        console.log("I am a message")
+    }, [page]);
+
     return (
         <div>
             <h1>Manager name: {name}</h1>
@@ -22,7 +26,7 @@ export const Manager = () => {
             <p>Users from jsonplaceholder</p>
             <button onClick={() => { setPage(1) }}>Page 1</button>
             <button onClick={() => { setPage(2) }}>Page 2</button>
-            <Employee page={page}/>
+            <Employee page={page} displayMessage={displayMessage}/>
         </div>
     )
 }

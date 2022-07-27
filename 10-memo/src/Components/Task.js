@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 
 export const Task = () => {
 
     const [tasks, setTasks] = useState([]);
+    const [count, setCount] = useState(1230);
 
     const saveTasks = (e) => {
         e.preventDefault();
@@ -18,6 +19,20 @@ export const Task = () => {
         setTasks(newTask)
     }
 
+    const sumCounter = (e) => {
+        setCount(count + 1);
+    }
+
+    const oldCounter = (acu) => {
+
+        for(let i = 0; i <= acu; i++) {
+            console.log('Executing old acumulators...');
+        }
+        return `Task List: ${acu}`;
+    }
+
+    const memoCount = useMemo(() => oldCounter(count), [count])
+
     return (
         <div className='taskContainer'>
             <h1>Mis Tares</h1>
@@ -25,7 +40,8 @@ export const Task = () => {
                 <input type='text' name='title' placeholder='Describe your task' />
                 <input type='submit' value='Save'/>
             </form>
-            <h3>Task List</h3>
+            <h3>{memoCount}</h3>
+            <button onClick={sumCounter}>Add</button>
             <ul>
             {
                 tasks.map((task, index) => {

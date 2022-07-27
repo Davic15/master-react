@@ -9,10 +9,10 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         {/* Method memo for components */}
-        {/*<Manager/>*/}
+        <Manager/>
 
         {/* Hook Memo */}
-        <Task />
+        {/*<Task />*/}
       </header>
     </div>
   );

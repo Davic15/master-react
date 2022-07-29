@@ -36,3 +36,36 @@
     transform: rotate(360deg);
   }
 }
+
+.my-form input,
+.my-form textarea {
+  display: block;
+  width: 80%;
+  max-width: 300px;
+  margin: 15px auto;
+  padding: 10px;
+}
+
+.my-form input[type="submit"] {
+  width: 100px;
+  cursor: pointer;
+  margin-bottom: 100px;
+  background-color: green;
+  color: white;
+  border: 0px;
+  border-radius: 3px;
+}
+
+.my-form input[type="submit"]:hover {
+  background-color: rgb(6, 150, 6);
+}
+
+.code {
+  font-size: 12px;
+}
+
+.sent {
+  background-color: greenyellow;
+  color: white;
+  padding: 5px;
+}

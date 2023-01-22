@@ -1,0 +1,12 @@
+//* Nested tags
+.box {
+    h2 {
+        color: black;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    p {
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        text-decoration: underline;
+    }
+}

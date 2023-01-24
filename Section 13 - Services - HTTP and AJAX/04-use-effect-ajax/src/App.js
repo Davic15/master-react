@@ -1,16 +1,13 @@
 import logo from './logo.svg';
 import './App.css';
-import { NewComponent } from './Components/NewComponent';
+import { AjaxComponent } from './Components/AjaxComponent';
 
 function App() {
-  const date = new Date();
-  const year = date.getFullYear();
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <h1>Main Component</h1>
-        <NewComponent year={year}/>
+        <AjaxComponent />
       </header>
     </div>
   );

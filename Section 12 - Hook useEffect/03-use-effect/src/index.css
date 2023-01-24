@@ -17,6 +17,8 @@ code {
   border-radius: 5px;
   padding: 5px;
   color: #444;
+  margin: 15px;
+  display: block;
 }
 
 .label-green {

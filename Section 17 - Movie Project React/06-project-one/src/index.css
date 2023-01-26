@@ -191,6 +191,26 @@ input[type="submit"] {
   text-decoration: none;
 }
 
+
+.edit-title,
+.description-edit {
+  display: block;
+  margin: 0 auto;
+  margin-top: 15px;
+  padding: 15px;
+  border-radius: 5px;
+  background: #f6f7f9;
+  color: #454545;
+  width: 80%;
+  opacity: 4;
+  outline: 0;
+  border-color: transparent;
+}
+
+.not-found {
+  color: red;
+}
+
 @media (max-width: 1085px) {
   .content {
       flex-flow: column wrap;

@@ -22,6 +22,12 @@ export const MyRoutes = () => {
                     <Route path='/services' element={ <Services /> } />
                     <Route path='/curriculum' element={ <Curriculum /> } />
                     <Route path='/contact' element={ <Contact /> } />
+                    <Route path='*' element={ 
+                            <div className='page'>
+                                <h1 className='heading'>Error 404</h1> 
+                            </div>
+                        } 
+                    />
                 </Routes>
             </section>
 

@@ -3,7 +3,7 @@ import React from 'react'
 export const Curriculum = () => {
     return (
         <div className='page'>
-            <h1>Curriculum</h1>
+            <h1 className='heading'>Curriculum</h1>
             <ul>
                 <li>Cur 1</li>
                 <li>Cur 2</li>

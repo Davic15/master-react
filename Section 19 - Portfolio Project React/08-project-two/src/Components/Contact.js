@@ -3,7 +3,7 @@ import React from 'react'
 export const Contact = () => {
     return (
         <div className='page'>
-            <h1>Contact</h1>
+            <h1 className='heading'>Contact</h1>
             <form className='contact' action='mailto:user@user.com'>
                 <input type='text' placeholder='Name' />
                 <input type='text' placeholder='Surname' />

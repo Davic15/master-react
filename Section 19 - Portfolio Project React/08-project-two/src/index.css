@@ -102,7 +102,7 @@ code {
   font-weight: lighter;
 }
 
-.home a {
+.home .title a {
   background-color: #fa4529;
   color: white;
   padding: 1.5px;
@@ -153,9 +153,9 @@ button {
   cursor: pointer;
 }
 
+.home .title a:hover,
 input[type="submit"]:hover,
-button:hover,
-.home a:hover {
+button:hover {
   background-color: rgb(156, 142, 17);
 }
 
@@ -219,6 +219,13 @@ button:hover,
   color: gray;
   padding-top: 15px;
   border-top: 1px solid #ddd;
+}
+
+/* Projects */
+.page-work .mask {
+  height: 300px;
+  overflow: hidden;
+  box-shadow: 0px 0px 3px #ddd;
 }
 
 

@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 import { useCapsLock } from '../Hooks/useCapsLock'
 
 export const CustomHooks = () => {

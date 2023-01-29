@@ -1,7 +1,4 @@
 import './App.css';
-import { CustomHooks } from './Components/CustomHooks';
-import { MyComponent } from './Components/MyComponent';
-import { MyForm } from './Components/MyForm';
 import { MyUser } from './Components/MyUser';
 
 function App() {

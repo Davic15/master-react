@@ -1,4 +1,6 @@
 ### Section 27 - Project Blog MERN
+### Backend
+
 ## Data Bases
 # SQL
     - Relational
@@ -40,3 +42,10 @@
         - And it will be connected with the document in the database.
         
 
+### Frontend
+## Vite
+    - Open our DataBase.
+        - MongoDBCompass
+        - MongoDD demon.
+    - Execute our API.
+    - Execute our React App.

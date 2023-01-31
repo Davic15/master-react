@@ -16,41 +16,22 @@ const port = 3900;
 app.use(cors());
 
 //* Change body to JavaScript object.
+//* Get data with content type app/json
 app.use(express.json());
+//* Get data with content type x-www-from-urlencoded
+app.use(express.urlencoded({extended: true}))
 
-//* Create Routes
-app.get('/try', (req, res) => {
-    console.log('Endpoint executed.')
-    //* send = returns a generic HTML
-    /*return res.status(200).send(`
-        <h1>
-            Response
-        </h1>
-    `)*/
-    //* send = returns an object
-    //* json = we can return them in this way.
-    return res.status(200).json({
-        course: 'React',
-        name: 'David'
-    })
-});
-
-app.get('/', (req, res) => {
-    console.log('Endpoint executed.')
-    //* send = returns a generic HTML
-    /*return res.status(200).send(`
-        <h1>
-            Response
-        </h1>
-    `)*/
-    //* send = returns an object
-    //* json = we can return them in this way.
-    return res.status(200).send(`
-        <h1>Home</h1>
-    `)
-});
+//* Routes
+const routeArticle = require('./routes/article');
+//* Loading Routes
+app.use('/api', routeArticle)
 
 //* Create the server and listen HTTP requests.
 app.listen(port, () => {
     console.log('The server is running on port ' + port);
 });
+
+
+
+
+

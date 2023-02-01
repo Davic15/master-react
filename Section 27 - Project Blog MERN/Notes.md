@@ -49,3 +49,13 @@
         - MongoDD demon.
     - Execute our API.
     - Execute our React App.
+
+## Blog Frontend
+    - Layout
+        - Component that are the same in the whole page.
+    - Pages
+        - Different pages for our project.
+    - Hooks
+        - Custom or React hooks.
+    - Routing
+        - React Router

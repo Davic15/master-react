@@ -1,32 +1,30 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { Request } from "../../helpers/Request";
+import { Global } from "../../helpers/Global";
+import { List } from "./List";
 
 export const Articles = () => {
-  return (
-    <>
-        <article className="article-item">
-            <h3 className="title">Web Development</h3>
-            <p className="description">My portfolio.</p>
-            <button className="edit">Edit</button>
-            <button className="delete">Delete</button>
-        </article>
-        <article className="article-item">
-            <h3 className="title">Web Development</h3>
-            <p className="description">My portfolio.</p>
-            <button className="edit">Edit</button>
-            <button className="delete">Delete</button>
-        </article>
-        <article className="article-item">
-            <h3 className="title">Web Development</h3>
-            <p className="description">My portfolio.</p>
-            <button className="edit">Edit</button>
-            <button className="delete">Delete</button>
-        </article>
-        <article className="article-item">
-            <h3 className="title">Web Development</h3>
-            <p className="description">My portfolio.</p>
-            <button className="edit">Edit</button>
-            <button className="delete">Delete</button>
-        </article>
-    </>
-  );
+    const [articles, setArticles] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        getData();
+    }, []);
+
+    const getData = async () => {
+        const {data, loading} = await Request(Global.url + 'articles', "GET");
+
+        if(data.status === 'Success') {
+            setArticles(data.articles);
+        }
+        setLoading(false)
+    }
+
+    return (
+        <>
+            {loading ? 'Loading...' : 
+                articles.length >= 1 ? <List articles={articles} setArticles={setArticles} /> : <h1>No articles found</h1>
+            }
+        </>
+    );
 };

@@ -1,7 +1,18 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Global } from '../../helpers/Global';
+import { Request } from '../../helpers/Request';
 
 export const List = ({articles, setArticles}) => {
+    
+    const deleteArticle = async(id) => {
+        let {data} = await Request(Global.url + 'article/' + id, 'DELETE');
+        if(data.status == 'Success') {
+            const updateArticles = articles.filter(article => article._id !== id);
+            setArticles(updateArticles)
+        }
+    }
+
     return (
         articles.map(article => {
             return(
@@ -11,10 +22,10 @@ export const List = ({articles, setArticles}) => {
                         {article.image == 'default.png' && <img src={Global.url + 'image/' + article.image} alt={article.title} />}
                     </div>
                     <div className="data">
-                        <h3 className="title">{article.title}</h3>
+                        <h3 className="title"><Link to={'/article/' + article._id}>{article.title}</Link></h3>
                         <p className="description">{article.content}</p>
-                        <button className="edit">Edit</button>
-                        <button className="delete">Delete</button>
+                        <Link to={'/edit/' + article._id} className="edit">Edit</Link>
+                        <button className="delete" onClick={ () => deleteArticle(article._id) }>Delete</button>
                     </div>
                 </article>
             );

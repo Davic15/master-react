@@ -1,6 +1,8 @@
 //* Import dependencies and modules
 const bcrypt = require('bcrypt');
-const mongoosePagination = require('mongoose-pagination')
+const mongoosePagination = require('mongoose-pagination');
+const fs = require('fs');
+const path = require('path');
 //* Import models
 const User = require('../models/user');
 const jwt = require('../services/jwt');
@@ -198,10 +200,157 @@ const listUser = (req, res) => {
             pages: Math.ceil(total / itemsPerPage)
         });
     })
-
-    
 }
 
+/* ********************************************************************************************* */
+/* 
+    Update user
+    1) Get information.
+    2) Check if user exists.
+    3) Encrypt password.
+    4) Find and Update.
+*/
+const updateUser = (req, res) => {
+    //* 1) Get information.
+    let userIdentity = req.user;
+    let userToUpdate = req.body;
+    delete userToUpdate.iat;
+    delete userToUpdate.exp;
+    delete userToUpdate.role;
+    delete userToUpdate.image;
+
+    //* 2) Check if user exists.
+    User.find({ $or: [
+        { email: userToUpdate.email.toLowerCase() },
+        { nick: userToUpdate.nick.toLowerCase() }
+    ]}).exec(async(error, users) => {
+        if(error) {
+            return res.status(500).json({
+                status: 'error',
+                message: 'Update user found an error. Cannot connect to the Database.'
+            });
+        }
+        let userIsSet = false;
+        users.forEach(user => {
+            if(user && user._id != userIdentity.id) userIsSet = true
+        })
+        if(userIsSet) {
+            return res.status(200).json({
+                status: 'success',
+                message: 'Update user found an error. User already exists in the Database.'
+            });
+        }
+
+        //* 3) Encrypt password.
+        if(userToUpdate.password) {
+            let hashToSave = await bcrypt.hash(userToUpdate.password, 10);
+            userToUpdate.password = hashToSave;
+        }
+        userToUpdate.email = userToUpdate.email.toLowerCase();
+        userToUpdate.nick = userToUpdate.nick.toLowerCase();
+
+        //* 4) Find and Update.
+        try {
+            let userUpdated = await User.findByIdAndUpdate({_id: userIdentity.id}, userToUpdate, {new: true});
+            if(!userUpdated) {
+                return res.status(400).json({
+                    status: 'error',
+                    message: 'Update user found an error. Cannot connect to the Database.'
+                });
+            }
+            return res.status(200).send({
+                status: 'success',
+                message: 'Update user.',
+                user: userUpdated
+            }); 
+        } catch (error) {
+            return res.status(500).json({
+                status: 'error',
+                message: 'Update user found an error. Error updating the user.'
+            });
+        }
+    });
+}
+
+/* ********************************************************************************************* */
+/* 
+    Upload Image.
+    1) Check if the file exists.
+    2) Get file name.
+    3) Get the extension.
+    4) Delete file if the extension is not correct.
+    5) Save the file.
+    6) Return response.
+*/
+const uploadImage = (req, res) => {
+    //* 1) Check if the file exists.
+    if(!req.file) {
+        return res.status(404).json({
+            status: 'error',
+            message: 'Upload image found an error. File does not exist.'
+        });
+    }
+
+    //* 2) Get file name.
+    let image = req.file.originalname;
+
+    //* 3) Get the extension.
+    const imageSplit = image.split('\.');
+    const extension = imageSplit[1];
+
+    //* 4) Delete file if the extension is not correct.
+    if(extension != 'png' && extension != 'jpg' && extension != 'jpeg' && extension != 'gif') {
+        const filePath = req.file.path;
+        const fileDeleted = fs.unlinkSync(filePath);
+        return res.status(400).send({
+            status: 'error',
+            message: 'Upload image found an error. Extension not valid.'
+        })
+    }
+
+    //* 5) Save the file.
+    User.findOneAndUpdate({_id: req.user.id}, {image: req.file.filename}, {new: true}, (error, userUpdated) => {
+        if(error || !userUpdated) {
+            return res.status(500).json({
+                status: 'error',
+                message: 'Upload image found an error. Error uploading the image.'
+            });
+        }
+        return res.status(200).send({
+            status: 'success',
+            message: 'Upload image done successfully.',
+            user: userUpdated,
+            file: req.file
+        }); 
+    })
+}
+
+/* ********************************************************************************************* */
+/* 
+    Get Avatar
+    1) Get params from the url.
+    2) Write the path for the image.
+    3) Check if the file exist.
+    4) If so, return file.
+*/
+const avatar = (req, res) => {
+    //* 1) Get params from the url.
+    const file = req.params.file
+
+    //* 2) Write the path for the image.
+    const filePath = './uploads/avatars/' + file;
+    
+    //* 3) Check if the file exist.
+    fs.stat(filePath, (error, exist) => {
+        if(!exist) {
+            return res.status(404).send({
+                status: 'error',
+                message: 'Get avatar found an error. File not found.'
+            });
+        }
+        return res.sendFile(path.resolve(filePath))
+    });
+}
 
 /* ********************************************************************************************* */
 
@@ -220,5 +369,8 @@ module.exports = {
     loginUser,
     getProfileUser,
     listUser,
+    updateUser,
+    uploadImage,
+    avatar,
     userTest
 }

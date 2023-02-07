@@ -1,5 +1,8 @@
+const mongoosePagination = require('mongoose-pagination');
 const Follow = require('../models/follow');
 const User = require('../models/user');
+
+const followService = require('../services/followService');
 //* Some actions
 
 /* ********************************************************************************************* */
@@ -81,10 +84,35 @@ const saveUnfollow = (req, res) => {
     6) Array de Ids of user that I follow and following me.
 */
 const userFollowing = (req, res) => {
-    return res.status(200).send ({
-        status: 'success',
-        message: 'List of users I am following.'
-    });
+    //* 1) Get user Id.
+    let userId = req.user.id;
+
+    //* 2) Check if the Id is inside the parameters.
+    if (req.params.id) userId = req.params.id;
+
+    //* 3) Check the page, otherwise page 1.
+    let page = 1;
+    if(req.params.page) page = req.params.page;
+
+    //* 4) User per page.
+    const itemsPerPage = 5;
+
+    //* 5) Find, follow, and pagination.
+    Follow.find({user: userId})
+    .populate('user followed', '-password -role -__v')
+    .paginate(page, itemsPerPage, async(error, follows, totalElements) => {
+        //* 6) Array de Ids of user that I follow and following me.
+        const followUserIds = await followService.followUserIds(req.user.id);
+        return res.status(200).send ({
+            status: 'success',
+            message: 'List of users I am following.',
+            follows,
+            totalElements,
+            pages: Math.ceil(totalElements / itemsPerPage),
+            user_following: followUserIds.following,
+            user_follow_me: followUserIds.followers
+        });
+    })
 }
 
 /* ********************************************************************************************* */
@@ -92,10 +120,43 @@ const userFollowing = (req, res) => {
     List of users that are following me.
 */
 const userFollowers = (req, res) => {
+    //* 1) Get user Id.
+    let userId = req.user.id;
+
+    //* 2) Check if the Id is inside the parameters.
+    if (req.params.id) userId = req.params.id;
+
+    //* 3) Check the page, otherwise page 1.
+    let page = 1;
+    if(req.params.page) page = req.params.page;
+
+    //* 4) User per page.
+    const itemsPerPage = 5;
+    
+    //* 5) Find, follow, and pagination.
+    Follow.find({followed: userId})
+    .populate('user', '-password -role -__v')
+    .paginate(page, itemsPerPage, async(error, follows, totalElements) => {
+
+        //* 6) Array de Ids of user that I follow and following me.
+        const followUserIds = await followService.followUserIds(req.user.id);
+        return res.status(200).send ({
+            status: 'success',
+            message: 'List of users that followed me.',
+            follows,
+            totalElements,
+            pages: Math.ceil(totalElements / itemsPerPage),
+            user_following: followUserIds.following,
+            user_follow_me: followUserIds.followers
+        });
+    })
+
+    //* 4) User per page.
+    /*const itemsPerPage = 5;
     return res.status(200).send ({
         status: 'success',
         message: 'List of users I am following.'
-    });
+    });*/
 }
 
 /* ********************************************************************************************* */

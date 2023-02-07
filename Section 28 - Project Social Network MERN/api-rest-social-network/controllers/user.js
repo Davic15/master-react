@@ -6,6 +6,7 @@ const path = require('path');
 //* Import models
 const User = require('../models/user');
 const jwt = require('../services/jwt');
+const followService = require('../services/followService');
 
 /* ********************************************************************************************* */
 /* 
@@ -145,7 +146,7 @@ const getProfileUser = (req, res) => {
     //* 2) Query to get user data.
     User.findById(id)
     .select({password: 0, role: 0})
-    .exec((error, userProfile) => {
+    .exec(async(error, userProfile) => {
         if(error || !userProfile) {
             return res.status(404).send({
                 status: 'error',
@@ -154,11 +155,15 @@ const getProfileUser = (req, res) => {
         };
 
         //* 3) Return result.
-        //* Later return follow information
+        //* Follow Information
+        const followInfo = await followService.followThisUser(req.user.id, id);
+
         return res.status(200).send({
             status: 'success',
             message: 'Get profile user done successfully',
-            user: userProfile
+            user: userProfile,
+            following: followInfo.following,
+            follower: followInfo.follower
         });
     });
 };
@@ -180,7 +185,7 @@ const listUser = (req, res) => {
 
     //* 2) Query with mongoose paginate.
     let itemsPerPage = 5;
-    User.find().sort('_id').paginate(page, itemsPerPage, (error, users, total) => {
+    User.find().sort('_id').paginate(page, itemsPerPage, async(error, users, total) => {
         if(error || !users) {
             return res.status(404).send({
                 status: 'erro',
@@ -188,6 +193,8 @@ const listUser = (req, res) => {
                 error
             });
         }
+        
+        const followInfo = await followService.followThisUser(req.user.id, id);
 
         //* 3) Return results.
         return res.status(200).send({
@@ -197,7 +204,9 @@ const listUser = (req, res) => {
             page,
             itemsPerPage,
             total,
-            pages: Math.ceil(total / itemsPerPage)
+            pages: Math.ceil(total / itemsPerPage),
+            following: followInfo.following,
+            follower: followInfo.follower
         });
     })
 }

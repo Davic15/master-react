@@ -25,7 +25,8 @@ router.get('/profile/:id', auth.auth, userController.getProfileUser);
 router.get('/list/:page?', auth.auth, userController.listUser);
 router.put('/update', auth.auth, userController.updateUser);
 router.post('/upload', [auth.auth, uploads.single('file0')], userController.uploadImage);
-router.get('/avatar/:file', auth.auth, userController.avatar);
+router.get('/avatar/:file', userController.avatar);
+router.get('/counters/:id', auth.auth, userController.counters);
 
 //* Export Router
 

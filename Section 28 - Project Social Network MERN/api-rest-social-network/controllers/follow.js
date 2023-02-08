@@ -99,7 +99,7 @@ const userFollowing = (req, res) => {
 
     //* 5) Find, follow, and pagination.
     Follow.find({user: userId})
-    .populate('user followed', '-password -role -__v')
+    .populate('user followed', '-password -role -__v -email')
     .paginate(page, itemsPerPage, async(error, follows, totalElements) => {
         //* 6) Array de Ids of user that I follow and following me.
         const followUserIds = await followService.followUserIds(req.user.id);
@@ -135,7 +135,7 @@ const userFollowers = (req, res) => {
     
     //* 5) Find, follow, and pagination.
     Follow.find({followed: userId})
-    .populate('user', '-password -role -__v')
+    .populate('user', '-password -role -__v -email')
     .paginate(page, itemsPerPage, async(error, follows, totalElements) => {
 
         //* 6) Array de Ids of user that I follow and following me.

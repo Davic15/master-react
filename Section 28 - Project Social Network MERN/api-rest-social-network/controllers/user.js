@@ -7,6 +7,8 @@ const path = require('path');
 const User = require('../models/user');
 const jwt = require('../services/jwt');
 const followService = require('../services/followService');
+const Follow = require("../models/follow");
+const Publication = require("../models/publication");
 
 /* ********************************************************************************************* */
 /* 
@@ -185,7 +187,7 @@ const listUser = (req, res) => {
 
     //* 2) Query with mongoose paginate.
     let itemsPerPage = 5;
-    User.find().sort('_id').paginate(page, itemsPerPage, async(error, users, total) => {
+    User.find().select('-password -email -role -__v').sort('_id').paginate(page, itemsPerPage, async(error, users, total) => {
         if(error || !users) {
             return res.status(404).send({
                 status: 'erro',
@@ -254,6 +256,8 @@ const updateUser = (req, res) => {
         if(userToUpdate.password) {
             let hashToSave = await bcrypt.hash(userToUpdate.password, 10);
             userToUpdate.password = hashToSave;
+        } else {
+            delete userToUpdate.password;
         }
         userToUpdate.email = userToUpdate.email.toLowerCase();
         userToUpdate.nick = userToUpdate.nick.toLowerCase();
@@ -361,6 +365,37 @@ const avatar = (req, res) => {
     });
 }
 
+
+/* 
+    Counter
+*/
+const counters = async (req, res) => {
+    let userId = req.user.id;
+
+    if (req.params.id) {
+        userId = req.params.id;
+    }
+
+    try {
+        const following = await Follow.count({ "user": userId });
+        const followed = await Follow.count({ "followed": userId });
+        const publications = await Publication.count({ "user": userId });
+
+        return res.status(200).send({
+            userId,
+            following: following,
+            followed: followed,
+            publications: publications
+        });
+    } catch (error) {
+        return res.status(500).send({
+            status: "error",
+            message: "Error in counting.",
+            error
+        });
+    }
+}
+
 /* ********************************************************************************************* */
 
 const userTest = (req, res) => {
@@ -371,7 +406,6 @@ const userTest = (req, res) => {
     })
 }
 
-
 //* Export actions
 module.exports = {
     registerUser,
@@ -381,5 +415,6 @@ module.exports = {
     updateUser,
     uploadImage,
     avatar,
+    counters,
     userTest
 }

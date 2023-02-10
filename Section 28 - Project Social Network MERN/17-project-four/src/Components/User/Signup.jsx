@@ -34,8 +34,12 @@ export const Signup = () => {
             </header>
             
             <div className="content__posts">
-                <strong className='alert alert-success'>{ saved == 'saved' ? 'User Registered' : '' }</strong>
-                <strong className='alert alert-danger'>{ saved == 'error' ? 'User was not registed' : '' }</strong>
+                { saved == 'saved' ? 
+                    <strong className='alert alert-success'>User Registered</strong>
+                : ''}
+                { saved == 'error' ?
+                    <strong className='alert alert-danger'>User was not registed</strong>
+                : ''}
                 <form className='register-form' onSubmit={saveUser}>
                     <div className="form-group">
                         <label htmlFor='name'>Name</label>

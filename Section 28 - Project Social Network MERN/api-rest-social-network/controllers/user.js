@@ -180,6 +180,7 @@ const getProfileUser = (req, res) => {
 const listUser = (req, res) => {
     //* 1) Check the current page.
     let page = 1;
+    const id = req.params.id;
     if(req.params.page) {
         page = req.params.page;
     }

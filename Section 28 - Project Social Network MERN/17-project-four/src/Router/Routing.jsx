@@ -3,7 +3,10 @@ import { Routes, Route, BrowserRouter, Navigate, Link } from 'react-router-dom';
 import { PrivateLayout } from '../Components/Layout/Private/PrivateLayout';
 import { PublicLayout } from '../Components/Layout/Public/PublicLayout';
 import { Feed } from '../Components/Publication/Feed';
+import { Config } from '../Components/User/Config';
 import { Login } from '../Components/User/Login';
+import { Logout } from '../Components/User/Logout';
+import { People } from '../Components/User/People';
 import { Signup } from '../Components/User/Signup';
 import { AuthProvider } from '../Context/AuthProvider';
 
@@ -21,6 +24,9 @@ export const Routing = () => {
                     <Route path='/social' element={ <PrivateLayout /> }>
                         <Route index element={ <Feed /> } />
                         <Route path='feed' element={ <Feed />} />
+                        <Route path='logout' element={ <Logout /> } />
+                        <Route path='people' element={ <People /> } />
+                        <Route path='config' element={ <Config /> } />
                     </Route>
 
                     <Route path='*' element={

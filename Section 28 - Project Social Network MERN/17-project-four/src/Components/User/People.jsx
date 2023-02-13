@@ -7,14 +7,19 @@ export const People = () => {
 
     const [users, setUsers] = useState({});
     const [loading, setLoading] = useState(true);
+    const [page, setPage] = useState(1);
+    const [more, setMore] = useState(true);
+    const [following, setFollowing] = useState([]);
+    const [loadingUser, setLoadingUser] = useState(true);
 
     useEffect(() => {
-        getUser();
+        getUser(1);
     }, [])
 
-    const getUser = async() => {
+    const getUser = async(nextPage = 1) => {
+        setLoadingUser(true)
         //* Request
-        const request = await fetch(Global.url + 'user/list/1', {
+        const request = await fetch(Global.url + 'user/list/' + nextPage, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -25,11 +30,68 @@ export const People = () => {
         
         //* Create state to list them
         if(data.users && data.status == 'success') {
-            setUsers(data.users);
-            setLoading(false)
-            console.log(users)
+            let newUsers = data.users;
+
+            if(users.length >= 1) {
+                newUsers = [...users, ...data.users];
+            }
+            setUsers(newUsers);
+            setFollowing(data.following)
+            setLoading(false);
+            setLoadingUser(false);
+            console.log(data)
+            
             //* Pagination
+            if(users.length >= (data.total - data.users.length)) {
+                setMore(false)
+            }
         }
+    }
+
+    const follow = async(id) => {
+        console.log(id)
+        //* Save Follow in the backed
+        const request = await fetch (Global.url + 'follow/save',{
+            method: 'POST',
+            body: JSON.stringify({followed: id}),
+            headers: {
+                'CONTENT-TYPE': 'application/json',
+                'authorization': localStorage.getItem('token')
+            }
+        })
+        const data = await request.json()
+        //* Check if correct
+        if(data.status === 'success') {
+            //* Update the following.
+            setFollowing([...following, id])
+        }
+
+    }
+
+    const unfollow = async(id) => {
+        console.log(id)
+        //* Save Follow in the backed
+        const request = await fetch(Global.url + 'follow/unfollow/' + id, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('token')
+            }
+        })
+        //* Check if correct
+        const data = await request.json()
+
+        //* Update the following.
+        if (data.status === 'success') {
+            let filterFollowing = following.filter(followingUserId => userId !== followingUserId);
+            setFollowing(filterFollowing)
+        }
+    }
+
+    const nextPage = () => {
+        let next = page + 1;
+        setPage(next);
+        getUser(next);
     }
 
     return (
@@ -37,7 +99,6 @@ export const People = () => {
             <header className="content__header">
                 <h1 className="content__title">People</h1>
             </header>
-
             <div className="content__posts">
                 {!loading && users.map(user => {
                     return (
@@ -60,25 +121,29 @@ export const People = () => {
                                 </div>
                             </div>
                             <div className="post__buttons">
-                                <a href="#" className="post__button post__button--green">
-                                    Follow
-                                </a>
-                                { /*
-                                <a href="#" className="post__button">
-                                    Unfollow
-                                </a>
-                                */}
+                                {!following.includes(users._id) && 
+                                    <button className="post__button post__button--green" onClick={ () => follow(users._id)}>
+                                        Follow
+                                    </button>
+                                }
+                                {following.includes(users._id) && 
+                                    <button className="post__button" onClick={ () => unfollow(users._id) }>
+                                        Unfollow
+                                    </button>
+                                }
                             </div>
                         </article>
                     )
                 })}
-                
             </div>
-            <div className="content__container-btn">
-                <button className="content__btn-more-post">
-                    More people
-                </button>
-            </div>
+            {loadingUser ? <div>Loading...</div> : ''}
+            {more && 
+                <div className="content__container-btn">
+                    <button className="content__btn-more-post" onClick={nextPage}>
+                        More people
+                    </button>
+                </div>
+            }
             <br />
         </>
     )

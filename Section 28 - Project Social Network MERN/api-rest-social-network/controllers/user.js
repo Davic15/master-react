@@ -191,7 +191,7 @@ const listUser = (req, res) => {
     User.find().select('-password -email -role -__v').sort('_id').paginate(page, itemsPerPage, async(error, users, total) => {
         if(error || !users) {
             return res.status(404).send({
-                status: 'erro',
+                status: 'error',
                 message: 'List users found an error. Query error and/or not users to display.',
                 error
             });

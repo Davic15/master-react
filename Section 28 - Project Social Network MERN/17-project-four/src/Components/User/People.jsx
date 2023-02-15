@@ -65,7 +65,6 @@ export const People = () => {
             //* Update the following.
             setFollowing([...following, id])
         }
-
     }
 
     const unfollow = async(id) => {
@@ -121,12 +120,12 @@ export const People = () => {
                                 </div>
                             </div>
                             <div className="post__buttons">
-                                {!following.includes(users._id) && 
+                                {!following.include(user._id) && 
                                     <button className="post__button post__button--green" onClick={ () => follow(users._id)}>
                                         Follow
                                     </button>
                                 }
-                                {following.includes(users._id) && 
+                                {following.include(user._id) && 
                                     <button className="post__button" onClick={ () => unfollow(users._id) }>
                                         Unfollow
                                     </button>
